@@ -18,5 +18,10 @@ resource "google_compute_subnetwork" "subnet" {
     range_name    = "services"
     ip_cidr_range = var.services_ip_cidr_range
   }
+  log_config {
+    flow_sampling = 0.5
+    aggregation_interval = "INTERVAL_10_MIN"
+    metadata      = "INCLUDE_ALL_METADATA"
+  }
 }
 

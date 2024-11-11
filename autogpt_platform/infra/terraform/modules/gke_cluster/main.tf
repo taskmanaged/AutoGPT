@@ -6,6 +6,20 @@ resource "google_container_cluster" "primary" {
     workload_pool = "${var.project_id}.svc.id.goog"
   }
 
+  master_auth {
+    client_certificate_config {
+      issue_client_certificate = false
+    }
+  }
+
+  private_cluster_config {
+    enable_private_nodes    = true
+    enable_private_endpoint = true
+  }
+
+  network_policy {
+    enabled = true
+  } 
 
   dynamic "node_pool" {
     for_each = var.enable_autopilot ? [] : [1]
@@ -30,6 +44,9 @@ resource "google_container_cluster" "primary" {
   ip_allocation_policy {
     cluster_secondary_range_name  = "pods"
     services_secondary_range_name = "services"
+  }
+  resource_labels = {
+    cluster_name = var.cluster_name
   }
 }
 

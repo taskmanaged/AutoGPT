@@ -5,6 +5,12 @@ resource "google_storage_bucket" "public_buckets" {
   name          = "${var.project_id}-${each.value}"
   location      = var.region
   force_destroy = true
+  versioning {
+    enabled = false
+  }
+  logging {
+    log_bucket = "${var.project_id}-logging"
+  }
 
   uniform_bucket_level_access = true
 
@@ -47,6 +53,9 @@ resource "google_storage_bucket" "standard_buckets" {
     enabled = true
   }
 
+  logging {
+    log_bucket = "${var.project_id}-logging"
+  }
 }
 
 resource "google_storage_bucket_iam_member" "standard_access" {
